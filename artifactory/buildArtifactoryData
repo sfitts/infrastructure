@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo docker run --volumes-from artifactory-server --name artifactory-data busybox true

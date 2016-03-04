@@ -1,0 +1,15 @@
+
+do_backup() {
+    NAME=$1
+    SOURCE=$2
+
+    BACKUP_FILE=${NAME}_`date +"%m_%d_%Y"`
+    if [ -e /docker/backups/$BACKUP_FILE ]
+    then
+        rm /docker/backups/$BACKUP_FILE
+    fi
+
+    sudo docker run --volumes-from $NAME-data -e SOURCE=$SOURCE -e BACKUP_FILE=$BACKUP_FILE -v /docker/backups:/local --rm backup
+}
+
+

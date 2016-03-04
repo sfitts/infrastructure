@@ -1,0 +1,12 @@
+#
+# Create backup of source directory to given destination file
+#
+
+FROM ubuntu:14.04
+MAINTAINER Sean Fitts "smfitts@gmail.com"
+
+ENV SOURCE set_source_directory
+ENV DEST /local
+ENV BACKUP_FILE backup
+
+ENTRYPOINT tar -C $SOURCE . -czvf $DEST/$BACKUP_FILE.tar.gz

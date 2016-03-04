@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source ../common/backupFuncs
+
+do_backup jenkins /jenkins

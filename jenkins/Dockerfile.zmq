@@ -1,0 +1,22 @@
+# Build ZeroMQ library
+#
+# ZeroMQ 4.0.4
+#
+
+FROM debian:wheezy
+MAINTAINER Sean Fitts "sean@you.tc"
+
+RUN apt-get update && apt-get install -y wget build-essential g++ libtool autoconf automake uuid-dev
+RUN wget --no-check-certificate http://download.zeromq.org/zeromq-4.0.4.tar.gz
+RUN tar -xvf zeromq-4.0.4.tar.gz
+
+# Do the build
+WORKDIR zeromq-4.0.4
+RUN ./configure && make && make install && ldconfig
+
+# Make build available externally
+RUN mkdir /libzmq && cp -R /usr/local/lib /libzmq && cp -RL /usr/local/include /libzmq
+VOLUME /libzmq
+
+ENV TARGET /build
+CMD ["sh", "-c", "cp -Rvp /libzmq ${TARGET}"]

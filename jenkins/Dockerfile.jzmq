@@ -1,0 +1,28 @@
+# Build ZeroMQ library
+#
+# ZeroMQ 4.0.4
+#
+
+FROM tc.you.pds/build-libzmq:latest
+MAINTAINER Sean Fitts "sean@you.tc"
+
+# Some additional utilities
+RUN apt-get update && apt-get install -y git pkg-config perl
+
+# Java 7
+RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" | tee /etc/apt/sources.list.d/webupd8team-java.list
+RUN echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
+RUN echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+RUN apt-get update && apt-get install oracle-java7-installer -y
+
+# Build JZMQ
+RUN git clone --depth 1 https://github.com/zeromq/jzmq.git
+RUN cd jzmq && ./autogen.sh && ./configure && make && make install && ldconfig
+
+# Make build available externally
+RUN mkdir /libjzmq && cp /usr/local/lib/libjzmq.so.0.0.0 /libjzmq/libjzmq.so
+VOLUME /libjzmq
+
+ENV TARGET /build
+CMD ["sh", "-c", "cp -R /libjzmq ${TARGET}"]

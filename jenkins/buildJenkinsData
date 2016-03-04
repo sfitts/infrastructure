@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo docker run -d --volumes-from jenkins-master --name jenkins-data busybox true

@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo docker run -d --name jenkins-master --volumes-from jenkins-data -p 18080:18080 jenkins
